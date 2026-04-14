@@ -1,0 +1,624 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Outfit:wght@400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --parchment: #fdf6e3;
+  --ink: #2a1f0e;
+  --muted: #6b5a3e;
+  --accent: #8b3a1a;
+  --accent2: #1a5c4a;
+  --accent3: #1a3d6b;
+  --line: rgba(42,31,14,0.15);
+  --bg-card: #fffdf7;
+  --tag-ref: #fef3e2;
+  --tag-ref-text: #854f0b;
+  --tag-ref2: #e8f4ef;
+  --tag-ref2-text: #0f6e56;
+  --tag-ref3: #e6f1fb;
+  --tag-ref3-text: #185fa5;
+}
+body{
+  font-family:'Outfit',sans-serif;
+  font-size:14px;
+  color:var(--ink);
+  background:transparent;
+  padding:0 0 3rem;
+}
+.header{
+  padding:2rem 2rem 1.5rem;
+  border-bottom:2px solid var(--accent);
+  margin-bottom:2rem;
+}
+.header-sub{font-family:'EB Garamond',serif;font-size:13px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.header h1{font-family:'EB Garamond',serif;font-size:28px;font-weight:500;line-height:1.2;color:var(--accent)}
+.header-meta{display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;letter-spacing:.04em}
+.badge-amber{background:var(--tag-ref);color:var(--tag-ref-text)}
+.badge-teal{background:var(--tag-ref2);color:var(--tag-ref2-text)}
+.badge-blue{background:var(--tag-ref3);color:var(--tag-ref3-text)}
+
+.nav{display:flex;gap:0;border-bottom:1px solid var(--line);padding:0 2rem;overflow-x:auto}
+.nav-btn{
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;
+  padding:.6rem 1.1rem;border:none;background:transparent;cursor:pointer;
+  color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;
+  white-space:nowrap;transition:color .15s,border-color .15s;
+}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-btn:hover{color:var(--ink)}
+
+.section{display:none;padding:1.5rem 2rem}
+.section.active{display:block}
+
+h2{font-family:'EB Garamond',serif;font-size:19px;font-weight:500;color:var(--accent);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid var(--line)}
+h3{font-family:'EB Garamond',serif;font-size:16px;font-weight:500;color:var(--ink);margin:1.2rem 0 .5rem}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.2rem}
+@media(max-width:560px){.two-col,.three-col{grid-template-columns:1fr}}
+
+.card{
+  background:var(--bg-card);
+  border:0.5px solid var(--line);
+  border-radius:10px;
+  padding:1rem 1.1rem;
+}
+.card-title{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.card p,.card li{font-size:13px;line-height:1.65;color:var(--ink)}
+.card ul{padding-left:1.1rem}
+.card li{margin-bottom:.2rem}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:1.2rem}
+.compare-cell{background:var(--bg-card);padding:.9rem 1rem}
+.compare-cell.header-cell{background:#f5ede0;font-weight:500;font-size:13px;color:var(--accent);text-align:center}
+.compare-cell.header-cell.right{background:#e8f0f8;color:var(--accent3)}
+.compare-cell p,.compare-cell li{font-size:13px;line-height:1.6}
+.compare-cell ul{padding-left:1.1rem}
+.compare-cell li{margin-bottom:.2rem}
+
+.timeline{position:relative;padding-left:2rem;margin-bottom:1rem}
+.timeline::before{content:'';position:absolute;left:.5rem;top:0;bottom:0;width:1px;background:var(--line)}
+.tl-item{position:relative;margin-bottom:1rem}
+.tl-item::before{content:'';position:absolute;left:-1.6rem;top:.35rem;width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.5px solid #fff;box-shadow:0 0 0 1px var(--accent)}
+.tl-item.tl-major::before{background:var(--accent);width:10px;height:10px;left:-1.7rem;top:.28rem}
+.tl-date{font-weight:500;font-size:12px;color:var(--accent);letter-spacing:.04em;margin-bottom:.1rem}
+.tl-text{font-size:13px;line-height:1.55;color:var(--ink)}
+.tl-text em{font-style:italic;color:var(--muted)}
+.tl-sub{padding-left:1rem;margin-top:.3rem}
+.tl-sub li{font-size:12.5px;list-style:none;padding-left:.7rem;position:relative;margin-bottom:.15rem;line-height:1.5;color:var(--ink)}
+.tl-sub li::before{content:'–';position:absolute;left:0;color:var(--muted)}
+
+.key-concept{background:#fdf3e7;border-left:3px solid var(--accent);padding:.7rem 1rem;border-radius:0 8px 8px 0;margin-bottom:.8rem;font-size:13px;line-height:1.6}
+.key-concept strong{color:var(--accent)}
+
+.key-concept2{background:#e8f4ef;border-left:3px solid var(--accent2);padding:.7rem 1rem;border-radius:0 8px 8px 0;margin-bottom:.8rem;font-size:13px;line-height:1.6}
+.key-concept2 strong{color:var(--accent2)}
+
+.key-concept3{background:#e6f1fb;border-left:3px solid var(--accent3);padding:.7rem 1rem;border-radius:0 8px 8px 0;margin-bottom:.8rem;font-size:13px;line-height:1.6}
+.key-concept3 strong{color:var(--accent3)}
+
+.quote-box{border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;background:#fffef7;margin-bottom:.8rem;font-family:'EB Garamond',serif;font-size:14px;font-style:italic;line-height:1.7;color:var(--ink)}
+.quote-src{font-style:normal;font-size:12px;color:var(--muted);margin-top:.3rem;font-family:'Outfit',sans-serif}
+
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:12px;margin:0 3px 3px 0}
+.tag-r{background:var(--tag-ref);color:var(--tag-ref-text)}
+.tag-g{background:var(--tag-ref2);color:var(--tag-ref2-text)}
+.tag-b{background:var(--tag-ref3);color:var(--tag-ref3-text)}
+
+.row-flex{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.col-flex{flex:1;min-width:200px}
+
+.small-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:1rem}
+.small-table th{text-align:left;padding:.4rem .6rem;background:#f5ede0;color:var(--accent);font-weight:500;border-bottom:1px solid var(--line)}
+.small-table td{padding:.4rem .6rem;border-bottom:0.5px solid var(--line);color:var(--ink);vertical-align:top;line-height:1.5}
+.small-table tr:last-child td{border-bottom:none}
+
+.zitat-hinweis{background:#f9f9f7;border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;font-size:12.5px;line-height:1.65}
+.zitat-hinweis ul{padding-left:1.1rem}
+.zitat-hinweis li{margin-bottom:.2rem}
+</style>
+
+<div class="header">
+  <div class="header-sub">Geschichte · MSS 11 · Kursarbeit</div>
+  <h1>Revolution und Renaissance</h1>
+  <div class="header-meta">
+    <span class="badge badge-amber">Reformation</span>
+    <span class="badge badge-teal">Humanismus &amp; Renaissance</span>
+    <span class="badge badge-blue">Entdeckungen</span>
+    <span class="badge badge-amber">Bauernkrieg</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('weltbild')">Weltbild</button>
+  <button class="nav-btn" onclick="show('entdeckungen')">Entdeckungen</button>
+  <button class="nav-btn" onclick="show('reformation')">Reformation</button>
+  <button class="nav-btn" onclick="show('bauernkrieg')">Bauernkrieg</button>
+  <button class="nav-btn" onclick="show('mittelalter')">Stadt im MA</button>
+  <button class="nav-btn" onclick="show('zitation')">Zitation</button>
+</nav>
+
+<div id="weltbild" class="section active">
+  <h2>Welt- und Menschenbild: Mittelalter → Renaissance</h2>
+
+  <div class="compare-grid">
+    <div class="compare-cell header-cell">Mittelalter</div>
+    <div class="compare-cell header-cell right">Renaissance &amp; Humanismus</div>
+    <div class="compare-cell">
+      <strong style="font-size:12px;color:var(--muted);display:block;margin-bottom:.4rem">Menschenbild</strong>
+      <ul>
+        <li>Mensch als Teil einer festen, unveränderlichen gottgegebenen Ordnung</li>
+        <li>Mensch ist sündhaft und auf Erlösung angewiesen</li>
+        <li>Individualität untergeordnet</li>
+      </ul>
+    </div>
+    <div class="compare-cell">
+      <strong style="font-size:12px;color:var(--accent3);display:block;margin-bottom:.4rem">Menschenbild</strong>
+      <ul>
+        <li>Freie Selbstbestimmung ohne Dogmen</li>
+        <li>Mensch als <em>Individuum</em> – Schöpfer seines eigenen Lebens</li>
+        <li>Mensch steht im Zentrum (Anthropozentrisch)</li>
+        <li>→ <strong>Uomo universale</strong>: in allen Disziplinen gleich gebildet</li>
+      </ul>
+    </div>
+    <div class="compare-cell">
+      <strong style="font-size:12px;color:var(--muted);display:block;margin-bottom:.4rem">Weltbild</strong>
+      <ul>
+        <li>Wissen &amp; Denken christlich geprägt</li>
+        <li>Welt als Prüfung für den Menschen (Vorbereitung auf Jenseits)</li>
+        <li>Wahrgenommen durch Glauben</li>
+      </ul>
+    </div>
+    <div class="compare-cell">
+      <strong style="font-size:12px;color:var(--accent3);display:block;margin-bottom:.4rem">Weltbild</strong>
+      <ul>
+        <li>Förderung von Bildung &amp; Humanismus</li>
+        <li>Wissenschaft von der Kirche getrennt</li>
+        <li>Welt ist erkennbar und erforschbar</li>
+        <li>Rückbesinnung auf Antike (griech. / röm. Quellen)</li>
+      </ul>
+    </div>
+    <div class="compare-cell">
+      <strong style="font-size:12px;color:var(--muted);display:block;margin-bottom:.4rem">Kunst</strong>
+      <ul><li>Religiöse, symbolische Darstellung; Gotteszentriert</li></ul>
+    </div>
+    <div class="compare-cell">
+      <strong style="font-size:12px;color:var(--accent3);display:block;margin-bottom:.4rem">Kunst</strong>
+      <ul><li>Kunst als individuelle Schöpfung; Perspektive, Naturalismus, Porträt</li></ul>
+    </div>
+  </div>
+
+  <h3>Humanismus – Kernmerkmale</h3>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title">Studium</div>
+      <p>Geschichte, Rhetorik, Philosophie, Theologie, Medizin – der Mensch, der in allen Fächern Bildung anstrebt.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Quellen &amp; Methode</div>
+      <p>Rückgriff auf antike Texte (Cicero, Aristoteles). Kritische Lektüre statt blinder Übernahme kirchlicher Lehre.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Gesellschaft</div>
+      <p>Eine neue geistige Strömung entsteht: Humanismus als Gegenentwurf zur scholastischen Theologie.</p>
+    </div>
+  </div>
+
+  <h3>Machiavelli &amp; politisches Denken</h3>
+  <div class="key-concept3">
+    <strong>„Der Fürst" (Il Principe), ca. 1513:</strong> Machiavelli beschreibt realpolitisches Handeln. Ein kluger Fürst muss sowohl Löwe (Stärke) als auch Fuchs (List) sein. Macht erhält, wer es versteht, Gesetze und Gewalt zu kombinieren – Moral dient dem Zweck, nicht als absoluter Maßstab. <span class="tag tag-b">M 35 / M 36</span>
+  </div>
+  <p style="font-size:13px;color:var(--muted);margin-top:.5rem">Begriff „Machiavellismus" heute: skrupellose, zweckorientierte Machtpolitik</p>
+</div>
+
+<div id="entdeckungen" class="section">
+  <h2>Die Welt wird entdeckt – Europäische Expansion</h2>
+
+  <div class="key-concept">
+    <strong>Ausgangslage:</strong> 1453 – Osmanen erobern Konstantinopel → Kontrolle über Handelsweg nach Asien; Sultan kann Durchfahrt verbieten oder hohe Zölle erheben → europäische Großmächte suchen Alternativen.
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Chronologie der Entdeckungen</h3>
+      <div class="timeline">
+        <div class="tl-item tl-major">
+          <div class="tl-date">1453</div>
+          <div class="tl-text">Osmanen erobern Konstantinopel. Handelsweg nach Asien abgeschnitten.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">ab 1480er</div>
+          <div class="tl-text">Portugal entdeckt Seeweg entlang der Küste Afrikas → Kap der Guten Hoffnung → nach Asien. Spanien muss Alternativen suchen.</div>
+        </div>
+        <div class="tl-item tl-major">
+          <div class="tl-date">1492</div>
+          <div class="tl-text">Spanische Krone finanziert Columbus eine Reise gen Westen. Er segelt um in Asien anzukommen – entdeckt zufällig Amerika. Glaubt selbst, er sei in Asien.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1494</div>
+          <div class="tl-text"><strong>Vertrag von Tordesillas:</strong> Papst Alexander VI. zieht eine Linie 300 Meilen westlich der Azoren. West → Spanien, Ost → Portugal.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1497–1512</div>
+          <div class="tl-text"><strong>Amerigo Vespucci</strong> erkennt: kein Asien, sondern ein neues Erdteil → „Neue Welt" / Amerika.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1500</div>
+          <div class="tl-text">Brasilien wird von Portugal entdeckt (daher portug. Einflussgebiet).</div>
+        </div>
+        <div class="tl-item tl-major">
+          <div class="tl-date">1519–1522</div>
+          <div class="tl-text"><strong>Magellan</strong> – erste Weltumsegelung. Beweist Kugelgestalt der Erde endgültig praktisch.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1529</div>
+          <div class="tl-text"><strong>Vertrag von Saragossa:</strong> Aufteilung der Welt in östliche Einflusssphären abgeschlossen.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1588</div>
+          <div class="tl-text">Niederlage der spanischen Armada gegen England → England öffnet sich als Seemacht.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>Folgen der Entdeckungen</h3>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Wirtschaftlich</div>
+        <ul class="card">
+          <li>Neue Handelswege → Atlantik wird wichtiger als Mittelmeer</li>
+          <li>Silber &amp; Gold aus Amerika → Preisrevolution in Europa</li>
+          <li>Dreieckshandel entsteht (Europa – Afrika – Amerika)</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Politisch</div>
+        <ul class="card">
+          <li>Spanien &amp; Portugal teilen die Welt unter sich auf (Tordesillas)</li>
+          <li>Entstehung formaler Kolonialherrschaft</li>
+          <li>Christliche Missionierung der indigenen Bevölkerung</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Für Indigene Völker</div>
+        <ul class="card">
+          <li>Versklavung &amp; Ausbeutung</li>
+          <li>Einschleppung von Krankheiten → Massensterblichkeit</li>
+          <li>Zerstörung von Kulturen und politischen Strukturen</li>
+        </ul>
+      </div>
+
+      <h3>Columbus &amp; die Indianer – Quellenarbeit</h3>
+      <div class="quote-box">
+        „[…] Ich bezahlte mich […] an Bord eines mit Waffen vorschaubaren Bootes an Land. Dort entfaltete ich die königliche Flagge […]"
+        <div class="quote-src">Columbus, Tagebuch, 12. Oktober 1492 — M 32</div>
+      </div>
+      <div class="key-concept2">
+        <strong>Friedrich W. Sixel</strong> (1982): Columbus war kein „Mittelalter"-Mensch – er strebte nach Wissen, Ruhm, Reichtum. Doch seine Behandlung der Indianer zeigt: Entwicklungslogik des Westens setzt sich über das Wohlergehen der Anderen hinweg. <span class="tag tag-g">M 9</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="reformation" class="section">
+  <h2>Die Reformation – Luther und die Kirchenspaltung</h2>
+
+  <div class="key-concept">
+    <strong>Kerngedanke Luthers:</strong> Das Evangelium allein ist die Quelle des Glaubens – nicht die Tradition der Kirche und nicht päpstliche Dekrete. Jeder Mensch kann die Bibel selbst lesen und verstehen (<em>Sola scriptura</em>). Der Mensch wird allein durch Glauben gerechtfertigt (<em>Sola fide</em>).
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Zeitstrahl der Reformation</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">1476</div>
+          <div class="tl-text">Hans Böhm predigt soziale Gleichheit → frühe Unruhen unter der Landbevölkerung</div>
+        </div>
+        <div class="tl-item tl-major">
+          <div class="tl-date">31. Oktober 1517</div>
+          <div class="tl-text">Luther veröffentlicht die <strong>95 Thesen</strong> gegen den Ablasshandel. Kritik: Ablass vermittelt keine echte Sündenvergebung.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1518</div>
+          <div class="tl-text">Beginn eines Ketzerprozesses gegen Luther (aus polit. Gründen verzögert – Kaiserwahl)</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1519</div>
+          <div class="tl-text">Tod Kaiser Maximilians I. → Machtkampf um Kaiserwahl (Karl V. setzt sich durch)</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1520</div>
+          <div class="tl-text">Luther veröffentlicht reformatorische Grundschriften:
+            <ul class="tl-sub">
+              <li>„Von der Freiheit eines Christenmenschen"</li>
+              <li>„An den christlichen Adel deutscher Nation"</li>
+              <li>„Von der babylonischen Gefangenschaft der Kirche"</li>
+            </ul>
+            Bruch mit der Kirche wird deutlicher.
+          </div>
+        </div>
+        <div class="tl-item tl-major">
+          <div class="tl-date">1521</div>
+          <div class="tl-text">
+            Luther wird <strong>exkommuniziert</strong>
+            <ul class="tl-sub">
+              <li><strong>Reichstag zu Worms</strong> → Luther verweigert Widerruf: <em>„Hier stehe ich, ich kann nicht anders."</em></li>
+              <li><strong>Wormser Edikt</strong>: Luther wird geächtet</li>
+              <li>Aufenthalt auf der Wartburg (Kurfürst Friedrich III. schützt ihn) → Übersetzung des Neuen Testaments ins Deutsche</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">ab 1521</div>
+          <div class="tl-text">Reformation verbreitet sich, gewinnt Unterstützung in Städten und unter Fürsten</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">1524–1526</div>
+          <div class="tl-text">Deutscher Bauernkrieg (→ Tab „Bauernkrieg")</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3>Konflikt mit Rom</h3>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Anlass: Ablasshandel</div>
+        <p>Kirche verkauft Ablass-Briefe (angeblich Erlass von Sündenstrafen). Luther sieht darin Missbrauch und Betrug an den Gläubigen. 95 Thesen als öffentliche Einladung zur Disputation.</p>
+      </div>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Theol. Grundsätze Luthers</div>
+        <ul class="card">
+          <li><strong>Sola scriptura</strong> – Bibel allein als Autorität</li>
+          <li><strong>Sola fide</strong> – allein durch Glauben gerechtfertigt</li>
+          <li><strong>Sola gratia</strong> – allein durch Gottes Gnade</li>
+          <li>Priestertum aller Gläubigen</li>
+        </ul>
+      </div>
+
+      <h3>Glaubensspaltung im Reich</h3>
+      <div class="key-concept">
+        Kaiser Karl V. lehnte auf dem Reichstag von 1521 ein an sein gewissensgebundenes Gewissen appellierendes Bekenntnis ab – erklärte Luther für <em>„vogelfrei"</em>. Der sächsische Kurfürst Friedrich schützte Luther auf der Wartburg. Luthers Popularität wuchs in der Bevölkerung. <span class="tag tag-r">S. 265–267</span>
+      </div>
+
+      <h3>Frühe 1520er – Bundschuh-Bewegung</h3>
+      <div class="card">
+        <div class="card-title">Vorläufer des Bauernkriegs</div>
+        <p>Ab den frühen 1520ern entstehen Bundschuh-Bewegung und weitere Bauernunruhen. Die Reformation gibt sozialen Forderungen religiöse Legitimation.</p>
+      </div>
+
+      <h3>Periodisierungsfrage</h3>
+      <table class="small-table" style="margin-top:.5rem">
+        <tr><th>Kriterium</th><th>Bedeutung</th></tr>
+        <tr><td>Treu halten</td><td>Welche Ereignisse bezeichnen echten Wandel?</td></tr>
+        <tr><td>Was nicht hält</td><td>Scheinwandel unter gleichen Umständen erkennen</td></tr>
+        <tr><td>Vorbildlich/fehlerhaft</td><td>Historische Akteure als Maßstab prüfen</td></tr>
+        <tr><td>Am Guten festhalten</td><td>Das Schlechte nicht zurückschrecken lassen</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="bauernkrieg" class="section">
+  <h2>Der Deutsche Bauernkrieg 1524–1526</h2>
+
+  <div class="key-concept">
+    <strong>Kernthese:</strong> Die Zwölf Artikel verbinden religiöse Forderungen (Evangelium, Pfarrerwahl) mit sozialen Forderungen (Abgaben, Leibeigenschaft). Luther unterstützt die religiösen Anliegen, lehnt jedoch den gewaltsamen Aufstand ab.
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Ursachen des Bauernkriegs</h3>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Sozial</div>
+        <ul class="card">
+          <li>Hohe Abgaben an adelige Grundherren</li>
+          <li>Leibeigenschaft und Fronarbeit</li>
+          <li>Mangelnder Zugang zu Wäldern, Gewässern, Weiden</li>
+          <li>Stadtische Ungleichheit – Patrizier vs. Handwerker</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:.8rem">
+        <div class="card-title">Religiös</div>
+        <ul class="card">
+          <li>Luthers Botschaft: Alle Menschen gleich vor Gott</li>
+          <li>Forderung nach evangelischen Pfarrern</li>
+          <li>Ablehnung weltlicher Macht der Kirche</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Politisch</div>
+        <ul class="card">
+          <li>Hans Böhm (1476): frühe Predigt sozialer Gleichheit</li>
+          <li>Bundschuh-Bewegung ab 1490er</li>
+          <li>Konkrete Zielvorstellungen: eigene politische Programme</li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <h3>Die Zwölf Artikel (1525) – Inhalt</h3>
+      <table class="small-table">
+        <tr><th>#</th><th>Forderung</th><th>Art</th></tr>
+        <tr><td>1</td><td>Recht der Gemeinde, Pfarrer selbst zu wählen und abzusetzen</td><td><span class="tag tag-b">Religiös</span></td></tr>
+        <tr><td>2</td><td>Abschaffung des kleinen Zehnten (Viehzehnten)</td><td><span class="tag tag-r">Sozial</span></td></tr>
+        <tr><td>3</td><td>Abschaffung der Leibeigenschaft – alle Menschen frei durch Christus</td><td><span class="tag tag-b">Religiös</span><span class="tag tag-r">Sozial</span></td></tr>
+        <tr><td>4</td><td>Freier Zugang zu Wildnis, Holz und Wasser</td><td><span class="tag tag-r">Sozial</span></td></tr>
+        <tr><td>5</td><td>Befreiung von übermäßigen Abgaben</td><td><span class="tag tag-r">Sozial</span></td></tr>
+        <tr><td>6</td><td>Verringerung der Frondienste auf gerechtes Maß</td><td><span class="tag tag-r">Sozial</span></td></tr>
+        <tr><td>7–12</td><td>Rechtliche Gleichheit, Abschaffung des Todfalls, gerechte Strafen</td><td><span class="tag tag-r">Sozial</span></td></tr>
+      </table>
+      <div class="quote-box">
+        In allen religiöse Begründungen aber klare Forderung.
+        <div class="quote-src">Notiz aus dem Unterricht</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Luthers Haltung – Widerspruch</h3>
+  <div class="two-col">
+    <div class="key-concept2">
+      <strong>Zunächst (April 1525):</strong> Luther fordert Herren auf, die Bauern gerecht zu behandeln und ihre Klagen anzuhören. Er erkennt die soziale Not als berechtigt an.
+    </div>
+    <div class="key-concept">
+      <strong>Dann: „Wider die räuberischen Rotten der Bauern" (Mai 1525):</strong> Luther ruft Fürsten auf, die Aufständischen zu töten. Gewalt dürfe nicht mit dem Evangelium begründet werden. Politischer Gehorsam sei gottgewollt. <span class="tag tag-r">M 34</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:.5rem">
+    <div class="card-title">Verlauf &amp; Ende</div>
+    <p style="font-size:13px;line-height:1.6">Etwa ab Beginn der 90er Jahre des 15. Jahrhunderts schließen sich Bauern zu Geheimorganisationen (Bundschuh) zusammen. Im Sommer 1524 brechen großflächige Aufstände aus – zunächst im süddeutschen Raum. Ca. 1525 scheitern die Aufstände: Adel &amp; Fürsten schlagen sie nieder. Die Niederlage der Bauern schwächt ihre politische Stellung für Jahrhunderte. Luther verliert viel Sympathie in der Unterschicht.</p>
+  </div>
+</div>
+
+<div id="mittelalter" class="section">
+  <h2>Die Stadt im Mittelalter</h2>
+
+  <div class="key-concept3">
+    <strong>Kernbild:</strong> Die Stadt ist eine „Insel" im Umland – durch Stadtrecht, Mauern und Privilegien von der Landgesellschaft abgetrennt. <em>Stadtluft macht frei</em> – wer 72 Stunden in der Stadt lebt, wird aus der Leibeigenschaft entlassen.
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h3>Merkmale der mittelalterlichen Stadt</h3>
+      <div class="card">
+        <div class="card-title">Rechtliche Stellung</div>
+        <ul class="card">
+          <li>Eigenes Stadtrecht (Stadtgründungsurkunde)</li>
+          <li>Rat &amp; eigene Rechtsprechung (Bürgermeister, Ratsherren)</li>
+          <li>Marktrecht: einmal/mehrmals pro Woche Markt abhalten</li>
+          <li>Schutz &amp; Handelsfreiheit als zentrale Privilegien</li>
+          <li>Zollfreiheit / Zollerleichterungen</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <h3>Gesellschaft von Stadt und Land</h3>
+      <div class="card">
+        <div class="card-title">Stadtgesellschaft</div>
+        <ul class="card">
+          <li><strong>Patrizier</strong> (Kaufleute, reiche Handwerker) – an der Macht</li>
+          <li><strong>Zünfte</strong> – Handwerker, Bäcker, Schmiede</li>
+          <li><strong>Unterschicht</strong> – Tagelöhner, Knechte, Bettler</li>
+          <li>Jüdische Minderheiten oft in Ghettos gedrängt</li>
+          <li>Ab 1500: Einwohnerzahl Paris ca. 200.000</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Fürsten im Mittelalter – Herrschaftsstrukturen</h3>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title">Macht</div>
+      <p>Fürsten erhalten direkt Gewalt über Land und Leute. Lehen-System: Land in Tausch gegen Kriegsdienst und Treue.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Eigenes Territorium</div>
+      <p>Eigene Rechtsetzung; keine Möglichkeit des Kaisers, in Prov. einzugreifen (→ Buch S. 82/83). Fürsten werden zu „Königen" in ihrem eigenen Territorium.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Wahlkönigtum</div>
+      <p>Ab ca. 13. Jhd.: Kurfürsten wählen den (neuen) Kaiser. Das macht den Kaiser abhängig. Erblichkeit wird nicht anerkannt. → Kreuzzüge schwächen Kaisermacht.</p>
+    </div>
+  </div>
+
+  <h3>Bäuerliches Leben im Mittelalter</h3>
+  <table class="small-table">
+    <tr><th>Tagesablauf</th><th>Belastungen</th></tr>
+    <tr><td>1) Tiere schlafen lassen / füttern</td><td>Hohe Abgaben an Klöster &amp; Herren</td></tr>
+    <tr><td>2) Kinder auf dem Feld einsetzen</td><td>Frondienste (unentgeltliche Arbeit)</td></tr>
+    <tr><td>3) Freie Nahrung von Viehem &amp; Flüssen</td><td>Abhängigkeit von Ernte &amp; Wetter</td></tr>
+    <tr><td>4) Vaterleben und die Zeit erleben</td><td>Keine politische Mitsprache</td></tr>
+    <tr><td>5) Freie Verfügung über den eigenen Boden</td><td>Leibeigenschaft in Teilen Europas</td></tr>
+    <tr><td>6) Rechtssicherheit</td><td>Willkür des Grundherrn</td></tr>
+    <tr><td>7) Richtige haben für die Ewigkeit</td><td>Kirchlicher Zehnt</td></tr>
+  </table>
+</div>
+
+<div id="zitation" class="section">
+  <h2>Zitation &amp; Quellenarbeit</h2>
+
+  <h3>Zitationshinweise (aus Unterricht)</h3>
+  <div class="zitat-hinweis">
+    <ul>
+      <li>Name des Orts / der Stadt mit gesellschaftlichem Gebiet</li>
+      <li>Name, Herkunft, Position</li>
+      <li>Amt oder Stellung (z. B. Landesverfassung)</li>
+      <li>Aus Verleger durchgeführte Zitate entnehmen</li>
+      <li>Geschichtsbuch als letztes Mittel zum Zitieren</li>
+    </ul>
+  </div>
+
+  <h3>Quellenanalyse – Schema</h3>
+  <table class="small-table">
+    <tr><th>Schritt</th><th>Frage</th></tr>
+    <tr><td>1 – Einordnung</td><td>Wer hat die Quelle verfasst? Wann, wo, für wen?</td></tr>
+    <tr><td>2 – Inhalt</td><td>Was wird gesagt? Worum geht es?</td></tr>
+    <tr><td>3 – Absicht</td><td>Was will der Verfasser erreichen? Welche Interessen?</td></tr>
+    <tr><td>4 – Kritik</td><td>Ist die Quelle glaubwürdig? Einseitig?</td></tr>
+    <tr><td>5 – Einordnung</td><td>Was sagt die Quelle über die Zeit aus?</td></tr>
+  </table>
+
+  <h3>Wichtige Materialien dieser Einheit</h3>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title">Humanismus / Renaissance</div>
+      <ul class="card">
+        <li>M 35: Machiavelli, „Der Fürst" (1513)</li>
+        <li>M 36: Machiavelli-Kriterien</li>
+        <li>M 14: Reichsordnung der Reichsstände</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Entdeckungen</div>
+      <ul class="card">
+        <li>M 9: Friedrich W. Sixel (1982)</li>
+        <li>M 32: Columbus Tagebuch (1492)</li>
+        <li>M 36: Vespucci-Brief (ca. 1503)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Reformation / Bauernkrieg</div>
+      <ul class="card">
+        <li>M 2: Konflikt mit Rom (S. 265)</li>
+        <li>M 9: Sixel über Columbus</li>
+        <li>M 34: Luther, „Wider die räuberischen Rotten…"</li>
+        <li>Zwölf Artikel der Bauern (S. 282–285)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Schlüsselbegriffe auf einen Blick</h3>
+  <div style="margin-top:.5rem;line-height:2">
+    <span class="tag tag-r">Ablasshandel</span>
+    <span class="tag tag-r">Exkommunikation</span>
+    <span class="tag tag-r">Reichstag zu Worms</span>
+    <span class="tag tag-r">Wormser Edikt</span>
+    <span class="tag tag-r">Sola scriptura</span>
+    <span class="tag tag-r">Sola fide</span>
+    <span class="tag tag-r">Leibeigenschaft</span>
+    <span class="tag tag-r">Bundschuh</span>
+    <span class="tag tag-b">Humanismus</span>
+    <span class="tag tag-b">Uomo universale</span>
+    <span class="tag tag-b">Tordesillas</span>
+    <span class="tag tag-b">Sola gratia</span>
+    <span class="tag tag-b">Machiavellismus</span>
+    <span class="tag tag-g">Kurfürsten</span>
+    <span class="tag tag-g">Stadtluft macht frei</span>
+    <span class="tag tag-g">Zwölf Artikel</span>
+    <span class="tag tag-g">Kolonialismus</span>
+    <span class="tag tag-g">Lehenswesen</span>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabs=['weltbild','entdeckungen','reformation','bauernkrieg','mittelalter','zitation'];
+  document.querySelectorAll('.nav-btn')[tabs.indexOf(id)].classList.add('active');
+}
+</script>
