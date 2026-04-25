@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physik · Arbeit, Energie &amp; Impuls</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f5f5f2;
+  --surface:#ffffff;
+  --text:#0d0d0d;
+  --muted:#6b6b6b;
+  --border:#e0dfd9;
+  --border-strong:#c4c2bc;
+  --accent:#1a4fd6;
+  --accent-light:#eef2ff;
+  --accent-border:#c3d0f7;
+  --hint-bg:#fff8ec;
+  --hint-border:#f0d9a0;
+  --hint-text:#7a5700;
+  --result-bg:#f0faf4;
+  --result-border:#a4d9b4;
+  --r:10px;
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.65;
+  font-size:15px;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.page-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:1.75rem 2.5rem 0;
+  position:sticky;top:0;z-index:100;
+}
+.page-title{font-size:19px;font-weight:600;letter-spacing:-0.2px}
+.page-sub{font-size:13px;color:var(--muted);margin-top:3px}
+.tabs{display:flex;gap:0;margin-top:1rem}
+.tab-btn{
+  background:none;border:none;padding:0.6rem 1.1rem;
+  font-size:14px;font-weight:500;color:var(--muted);
+  cursor:pointer;border-bottom:2px solid transparent;
+  transition:color .15s, border-color .15s;
+}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* ── Layout ──────────────────────────────────────────────────────── */
+.content{max-width:860px;margin:0 auto;padding:2rem 1.75rem 4rem}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* ── Section header ──────────────────────────────────────────────── */
+.sec-head{
+  display:flex;align-items:center;gap:10px;
+  margin:2rem 0 1rem;
+}
+.sec-head span{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--muted);white-space:nowrap;
+}
+.sec-head::before,.sec-head::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* ── Unit card ───────────────────────────────────────────────────── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  margin-bottom:1.25rem;
+  overflow:hidden;
+}
+.card-head{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1.1rem 1.4rem;
+  border-bottom:1px solid var(--border);
+  border-left:4px solid;
+}
+.sym{
+  font-size:17px;font-weight:700;
+  min-width:44px;height:44px;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.card-title h2{font-size:16px;font-weight:600;line-height:1.3}
+.card-title .unit{font-size:12.5px;color:var(--muted);font-family:'Courier New',monospace;margin-top:2px}
+
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;
+  padding:1.2rem 1.4rem;
+}
+.grid .full{grid-column:1/-1}
+.lbl{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--muted);margin-bottom:5px;
+}
+.body{font-size:14px;line-height:1.7;color:var(--text)}
+
+.formula-box{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:9px 14px;
+  text-align:center;
+  margin:4px 0 6px;
+  overflow-x:auto;
+}
+.mono{
+  font-family:'Courier New',monospace;font-size:12.5px;
+  background:#f0efe9;border-radius:4px;
+  padding:3px 7px;color:#333;display:inline-block;margin-top:4px;
+}
+
+/* ── Task ────────────────────────────────────────────────────────── */
+.task{
+  border-top:1px solid var(--border);
+  padding:1rem 1.4rem;
+  background:#fafaf8;
+}
+.task-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--muted);margin-bottom:6px;
+}
+.task-text{font-size:14px;line-height:1.7;margin-bottom:10px}
+
+.show-btn{
+  background:none;
+  border:1px solid var(--border-strong);
+  border-radius:6px;
+  padding:5px 13px;
+  font-size:13px;color:var(--muted);
+  cursor:pointer;transition:background .15s,color .15s;
+}
+.show-btn:hover{background:var(--bg);color:var(--text)}
+
+.sol{
+  display:none;
+  margin-top:12px;
+  background:var(--accent-light);
+  border:1px solid var(--accent-border);
+  border-radius:8px;
+  padding:1rem 1.2rem;
+}
+.step{
+  display:flex;gap:10px;margin-bottom:10px;
+  font-size:14px;line-height:1.75;
+}
+.step:last-child{margin-bottom:0}
+.sn{
+  font-weight:700;color:var(--accent);
+  font-size:13px;min-width:22px;padding-top:2px;flex-shrink:0;
+}
+.hint{
+  background:var(--hint-bg);
+  border:1px solid var(--hint-border);
+  border-radius:6px;
+  padding:7px 11px;
+  font-size:13px;color:var(--hint-text);
+  margin-bottom:8px;
+}
+.result{
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--accent-border);
+  font-size:14px;line-height:1.7;
+  background:var(--result-bg);
+  border-radius:0 0 6px 6px;
+  padding:8px 10px;
+  border:1px solid var(--result-border);
+  border-radius:6px;
+  margin-top:10px;
+}
+
+/* ── Summary box ─────────────────────────────────────────────────── */
+.summary-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.2rem 1.4rem;margin-bottom:1.25rem;
+}
+.formula-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:.6rem;
+  margin-top:.75rem;
+}
+.fg-item{font-size:13.5px;color:var(--text)}
+.note{font-size:13px;color:var(--muted);margin-top:.75rem;line-height:1.65}
+
+/* ── Exercise cards ──────────────────────────────────────────────── */
+.ex-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);margin-bottom:1.25rem;overflow:hidden;
+}
+.ex-head{
+  display:flex;align-items:center;gap:10px;
+  padding:1rem 1.4rem;border-bottom:1px solid var(--border);
+}
+.ex-num{
+  font-size:12px;font-weight:700;
+  color:var(--accent);background:var(--accent-light);
+  border-radius:5px;padding:3px 10px;white-space:nowrap;
+}
+.ex-title{font-size:15px;font-weight:600}
+.ex-tags{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+.tag{
+  font-size:11px;background:#f0efe9;color:var(--muted);
+  padding:2px 7px;border-radius:4px;font-weight:500;white-space:nowrap;
+}
+.ex-body{padding:1.2rem 1.4rem}
+.ex-text{font-size:14px;line-height:1.7;margin-bottom:.6rem}
+.given{
+  background:#f8f7f3;border:1px solid var(--border);
+  border-radius:7px;padding:.7rem 1rem;
+  font-size:13.5px;color:var(--muted);margin:.75rem 0 .9rem;
+}
+.given strong{color:var(--text)}
+.sub{
+  font-size:14px;line-height:1.7;
+  margin:.35rem 0 .35rem 1rem;
+}
+.sub::before{
+  content:attr(data-l) ')  ';
+  font-weight:700;color:var(--accent);
+}
+
+.ex-sol{
+  display:none;
+  border-top:1px solid var(--border);
+  padding:1.2rem 1.4rem;
+  background:#fafaf8;
+}
+.sub-sol{margin-bottom:1.4rem}
+.sub-sol:last-child{margin-bottom:0}
+.sub-sol-title{
+  font-size:13px;font-weight:700;
+  color:var(--accent);margin-bottom:7px;
+}
+.check{color:#059669;font-weight:700}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media(max-width:580px){
+  .grid{grid-template-columns:1fr}
+  .formula-grid{grid-template-columns:1fr}
+  .content{padding:1rem 1rem 3rem}
+  .page-header{padding:1.25rem 1rem 0}
+  .ex-tags{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-title">Physik — Arbeit, Energie &amp; Impuls</div>
+  <div class="page-sub">Einheiten · Formeln · Herleitungen · Aufgaben mit ausführlichen Lösungen</div>
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="switchTab('merkblatt',this)">Merkblatt</button>
+    <button class="tab-btn" onclick="switchTab('aufgaben',this)">Übungsaufgaben</button>
+  </nav>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════════════════════ TAB 1 -->
+<div id="merkblatt" class="tab-pane active">
+
+<!-- ───────────────────────────────────── KRAFT -->
+<div class="sec-head"><span>Kraft &amp; Arbeit</span></div>
+
+<div class="card">
+  <div class="card-head" style="border-left-color:#3b82f6">
+    <div class="sym" style="background:#eff6ff;color:#1e40af">N</div>
+    <div class="card-title">
+      <h2>Kraft</h2>
+      <div class="unit">Einheit: Newton &ensp; \([N] = [kg \cdot m/s^2]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body">Eine <strong>Kraft</strong> ist eine gerichtete Größe (Vektor), die einen Körper beschleunigen, verformen oder im Gleichgewicht halten kann. Sie ist immer die Ursache einer Beschleunigung oder Formveränderung.</div>
+    </div>
+    <div>
+      <div class="lbl">Grundformel — 2. Newtonsches Gesetz</div>
+      <div class="formula-box">\[\vec{F} = m \cdot \vec{a}\]</div>
+      <div class="body">Allgemeine Form: \(\vec{F} = \dfrac{\mathrm{d}\vec{p}}{\mathrm{d}t}\) &ensp; (Kraft = Impulsänderung pro Zeit)</div>
+    </div>
+    <div>
+      <div class="lbl">Herleitung der Einheit</div>
+      <div class="body">
+        1 Newton ist die Kraft, die einer Masse von 1 kg eine Beschleunigung von 1 m/s² erteilt:
+        \[[F] = [m] \cdot [a] = \mathrm{kg} \cdot \frac{\mathrm{m}}{\mathrm{s}^2} = \mathrm{N}\]
+        <span class="mono">1 N = 1 kg·m/s²</span>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Wichtige Spezialfälle</div>
+      <div class="body">
+        <strong>Gewichtskraft:</strong> \(F_G = m \cdot g\) &ensp; (\(g \approx 9{,}81\,\mathrm{m/s^2}\))<br>
+        <strong>Federkraft (Hooke):</strong> \(F = D \cdot x\)<br>
+        <strong>Gleitreibung:</strong> \(F_R = \mu \cdot F_N\)<br>
+        <strong>Zentripetalkraft:</strong> \(F_Z = \dfrac{m \cdot v^2}{r}\)
+      </div>
+    </div>
+    <div class="full">
+      <div class="lbl">Anwendungen</div>
+      <div class="body">Kraft ist die Grundgröße aller Mechanik. Sie ist nötig zur Berechnung von Arbeit \((W = F \cdot s)\), Impuls \((p = F \cdot t)\), und für alle dynamischen Analysen (Fahrzeuge, Statik, Biomechanik, Maschinenbau).</div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Ein Auto der Masse \(m = 1200\,\mathrm{kg}\) beschleunigt gleichmäßig von \(v_0 = 0\) auf \(v = 20\,\mathrm{m/s}\) in \(t = 8\,\mathrm{s}\). Welche Nettokraft wirkt auf das Fahrzeug?</p>
+    <button class="show-btn" onclick="tog('sk1',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk1">
+      <div class="step"><span class="sn">①</span><span><strong>Beschleunigung bestimmen:</strong>
+        \[a = \frac{\Delta v}{\Delta t} = \frac{20\,\mathrm{m/s}}{8\,\mathrm{s}} = 2{,}5\,\mathrm{m/s^2}\]</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Kraft mit 2. Newtonschen Gesetz:</strong>
+        \[F = m \cdot a = 1200\,\mathrm{kg} \cdot 2{,}5\,\mathrm{m/s^2} = 3000\,\mathrm{N}\]</span></div>
+      <div class="result">Ergebnis: \(\boxed{F = 3000\,\mathrm{N} = 3\,\mathrm{kN}}\)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────── ARBEIT -->
+<div class="card">
+  <div class="card-head" style="border-left-color:#10b981">
+    <div class="sym" style="background:#ecfdf5;color:#064e3b">J</div>
+    <div class="card-title">
+      <h2>Arbeit</h2>
+      <div class="unit">Einheit: Joule &ensp; \([J] = [N \cdot m] = [kg \cdot m^2/s^2]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body">Mechanische <strong>Arbeit</strong> wird verrichtet, wenn eine Kraft einen Körper entlang eines Weges verschiebt. Arbeit ist ein Skalar. Nur die zur Bewegungsrichtung <em>parallele</em> Kraftkomponente leistet Arbeit.</div>
+    </div>
+    <div>
+      <div class="lbl">Grundformel</div>
+      <div class="formula-box">\[W = F \cdot s \cdot \cos\alpha\]</div>
+      <div class="body">\(\alpha\) = Winkel zwischen Kraft- und Wegvektor.<br>Allgemein: \(W = \displaystyle\int \vec{F}\,\mathrm{d}\vec{s}\)</div>
+    </div>
+    <div>
+      <div class="lbl">Herleitung &amp; Spezialfälle</div>
+      <div class="body">
+        Das Skalarprodukt \(W = \vec{F} \cdot \vec{s}\) liefert nur den parallelen Anteil.
+        <br><br>
+        \(\alpha = 0°\): \(W = F \cdot s\) (Kraft || Weg)<br>
+        \(\alpha = 90°\): \(W = 0\) (z.B. Normalkraft)<br><br>
+        <strong>Hubarbeit:</strong> \(W_{hub} = m \cdot g \cdot h\)<br>
+        <strong>Beschleunigungsarbeit:</strong> \(W = \tfrac{1}{2}mv^2\)<br>
+        <strong>Federarbeit:</strong> \(W = \tfrac{1}{2}D \cdot x^2\)
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Einheitencheck</div>
+      <div class="body">
+        \[[W] = \mathrm{N} \cdot \mathrm{m} = \mathrm{kg} \cdot \frac{\mathrm{m}}{\mathrm{s}^2} \cdot \mathrm{m} = \frac{\mathrm{kg \cdot m^2}}{\mathrm{s}^2} = \mathrm{J}\]
+        Arbeit und Energie haben <em>dieselbe</em> Einheit — sie sind physikalisch gleichwertig.
+      </div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Eine Kiste (\(m = 50\,\mathrm{kg}\)) wird auf einer horizontalen Fläche mit einer Kraft \(F = 80\,\mathrm{N}\) über \(s = 3\,\mathrm{m}\) gezogen. Der Winkel zwischen Zugrichtung und Weg beträgt \(\alpha = 30°\). Wie viel Arbeit wird verrichtet?</p>
+    <button class="show-btn" onclick="tog('sk2',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk2">
+      <div class="step"><span class="sn">①</span><span><strong>Formel aufschreiben:</strong>
+        \[W = F \cdot s \cdot \cos\alpha\]</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Cosinus auswerten:</strong>
+        \[\cos 30° = \frac{\sqrt{3}}{2} \approx 0{,}866\]
+        Die horizontale Kraftkomponente beträgt \(F_x = 80 \cdot 0{,}866 = 69{,}3\,\mathrm{N}\). Nur diese leistet Arbeit.</span></div>
+      <div class="step"><span class="sn">③</span><span><strong>Einsetzen:</strong>
+        \[W = 80\,\mathrm{N} \cdot 3\,\mathrm{m} \cdot 0{,}866 \approx 207{,}8\,\mathrm{J}\]</span></div>
+      <div class="result">Ergebnis: \(\boxed{W \approx 208\,\mathrm{J}}\)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────── ENERGIE -->
+<div class="sec-head"><span>Energie</span></div>
+
+<!-- E_kin -->
+<div class="card">
+  <div class="card-head" style="border-left-color:#f59e0b">
+    <div class="sym" style="background:#fffbeb;color:#78350f;font-size:13px">\(E_{kin}\)</div>
+    <div class="card-title">
+      <h2>Kinetische Energie (Bewegungsenergie)</h2>
+      <div class="unit">Einheit: Joule &ensp; \([J] = [kg \cdot m^2/s^2]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body">Die <strong>kinetische Energie</strong> ist die Energie, die ein Körper aufgrund seiner Bewegung besitzt. Sie ist stets \(\geq 0\) und wächst mit dem <em>Quadrat</em> der Geschwindigkeit.</div>
+    </div>
+    <div>
+      <div class="lbl">Formel</div>
+      <div class="formula-box">\[E_{kin} = \frac{1}{2} \cdot m \cdot v^2\]</div>
+    </div>
+    <div class="full">
+      <div class="lbl">Herleitung über das Arbeit-Energie-Theorem</div>
+      <div class="body">
+        Die gesamte an einem Körper verrichtete Arbeit entspricht der Änderung seiner kinetischen Energie. Mit \(F = m \cdot a\) und \(W = F \cdot s\) sowie der Kinematik \(v^2 = 2 \cdot a \cdot s\) (für \(v_0 = 0\)):
+        \[W = m \cdot a \cdot s = m \cdot a \cdot \frac{v^2}{2a} = \frac{1}{2}mv^2\]
+        Das <strong>Arbeit-Energie-Theorem</strong> lautet allgemein:
+        \[\Delta E_{kin} = W_{ges}\]
+        Die Änderung der kinetischen Energie ist gleich der gesamten an ihr verrichteten Arbeit.
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Wichtige Eigenschaft</div>
+      <div class="body">\(E_{kin} \propto v^2\): Doppelte Geschwindigkeit → <strong>4-fache</strong> kinetische Energie! Daher ist der Bremsweg bei doppelter Geschwindigkeit viermal so lang.</div>
+    </div>
+    <div>
+      <div class="lbl">Anwendungen</div>
+      <div class="body">Bremswegberechnung, Fahrzeugsicherheit (Knautschzone), Windenergie (\(P \propto v^3\)), Stoßprozesse, kinetische Gastheorie.</div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Ein Fahrradfahrer (Gesamtmasse \(m = 90\,\mathrm{kg}\)) fährt mit \(v = 10\,\mathrm{m/s}\). Er bremst bis zum Stillstand. Welche Energie wird in Wärme umgewandelt? Wie lang ist der Bremsweg bei einer Bremskraft von \(F_B = 450\,\mathrm{N}\)?</p>
+    <button class="show-btn" onclick="tog('sk3',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk3">
+      <div class="step"><span class="sn">①</span><span><strong>Kinetische Energie berechnen:</strong>
+        \[E_{kin} = \frac{1}{2} \cdot 90\,\mathrm{kg} \cdot (10\,\mathrm{m/s})^2 = \frac{1}{2} \cdot 90 \cdot 100 = 4500\,\mathrm{J}\]
+        Diese gesamte kinetische Energie wird beim Bremsen vollständig in Wärme (Reibung) umgewandelt.</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Bremsweg via Arbeit-Energie-Theorem:</strong><br>
+        Die Bremsarbeit muss gleich der kinetischen Energie sein: \(F_B \cdot s = E_{kin}\)
+        \[s = \frac{E_{kin}}{F_B} = \frac{4500\,\mathrm{J}}{450\,\mathrm{N}} = 10\,\mathrm{m}\]</span></div>
+      <div class="result">Ergebnis: \(\boxed{E_{kin} = 4500\,\mathrm{J}}\) werden in Wärme umgewandelt; Bremsweg \(\boxed{s = 10\,\mathrm{m}}\).</div>
+    </div>
+  </div>
+</div>
+
+<!-- E_pot -->
+<div class="card">
+  <div class="card-head" style="border-left-color:#8b5cf6">
+    <div class="sym" style="background:#f5f3ff;color:#4c1d95;font-size:13px">\(E_{pot}\)</div>
+    <div class="card-title">
+      <h2>Potenzielle Energie (Lageenergie)</h2>
+      <div class="unit">Einheit: Joule &ensp; \([J] = [kg \cdot m^2/s^2]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body">Die <strong>potenzielle Energie</strong> (Lageenergie) ist die gespeicherte Energie eines Körpers aufgrund seiner Position im Schwerkraftfeld. Das Bezugsniveau \(h = 0\) ist frei wählbar — nur Differenzen \(\Delta E_{pot}\) sind physikalisch bedeutsam.</div>
+    </div>
+    <div>
+      <div class="lbl">Formel</div>
+      <div class="formula-box">\[E_{pot} = m \cdot g \cdot h\]</div>
+      <div class="body">mit \(g \approx 9{,}81\,\mathrm{m/s^2}\)</div>
+    </div>
+    <div>
+      <div class="lbl">Herleitung</div>
+      <div class="body">
+        Die Hubarbeit gegen die Gewichtskraft \(F_G = m \cdot g\) beim senkrechten Anheben um \(h\):
+        \[W_{hub} = F_G \cdot h = m \cdot g \cdot h\]
+        Diese Arbeit wird vollständig als potenzielle Energie gespeichert: \(E_{pot} = W_{hub}\).
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Energieerhaltungssatz (freier Fall)</div>
+      <div class="body">
+        Ohne Reibung ist die Gesamtenergie konstant:
+        \[E_{pot} + E_{kin} = \mathrm{const}\]
+        \[m \cdot g \cdot h + \frac{1}{2}mv^2 = \mathrm{const}\]
+        Daraus folgt für den freien Fall: \(v = \sqrt{2 \cdot g \cdot h}\)
+      </div>
+    </div>
+    <div class="full">
+      <div class="lbl">Anwendungen</div>
+      <div class="body">Pumpspeicherkraftwerke (Energie einspeichern durch Hochpumpen), Achterbahnen (Umwandlung \(E_{pot} \leftrightarrow E_{kin}\)), Pendel (periodische Umwandlung), freier Fall. Das Bezugsniveau kann z.B. der Boden, der Tisch oder der Erdmittelpunkt sein.</div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Ein Stein (\(m = 2\,\mathrm{kg}\)) fällt aus der Ruhe von einem \(h = 15\,\mathrm{m}\) hohen Turm. Mit welcher Geschwindigkeit trifft er auf dem Boden auf? (Luftwiderstand vernachlässigt)</p>
+    <button class="show-btn" onclick="tog('sk4',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk4">
+      <div class="step"><span class="sn">①</span><span><strong>Ansatz: Energieerhaltung</strong><br>
+        Die gesamte potenzielle Energie wird in kinetische Energie umgewandelt:
+        \[E_{pot} = E_{kin} \quad\Longrightarrow\quad m \cdot g \cdot h = \frac{1}{2} m \cdot v^2\]</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Nach v auflösen — die Masse m kürzt sich!</strong>
+        \[g \cdot h = \frac{1}{2} v^2 \quad\Longrightarrow\quad v = \sqrt{2 \cdot g \cdot h}\]
+        \[v = \sqrt{2 \cdot 9{,}81\,\mathrm{m/s^2} \cdot 15\,\mathrm{m}} = \sqrt{294{,}3\,\mathrm{m^2/s^2}} \approx 17{,}2\,\mathrm{m/s}\]</span></div>
+      <div class="result">Ergebnis: \(\boxed{v \approx 17{,}2\,\mathrm{m/s}}\) — Unabhängig von der Masse des Steins!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────── LEISTUNG -->
+<div class="sec-head"><span>Leistung</span></div>
+
+<div class="card">
+  <div class="card-head" style="border-left-color:#06b6d4">
+    <div class="sym" style="background:#ecfeff;color:#164e63">W</div>
+    <div class="card-title">
+      <h2>Leistung</h2>
+      <div class="unit">Einheit: Watt &ensp; \([W] = [J/s] = [kg \cdot m^2/s^3]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body"><strong>Leistung</strong> beschreibt, wie schnell Energie übertragen oder Arbeit verrichtet wird. Gleiche Arbeit in kürzerer Zeit bedeutet größere Leistung.</div>
+    </div>
+    <div>
+      <div class="lbl">Formeln</div>
+      <div class="formula-box">\[P = \frac{W}{t} \qquad P = F \cdot v\]</div>
+      <div class="body">Momentanleistung: \(P = \dfrac{\mathrm{d}W}{\mathrm{d}t}\)</div>
+    </div>
+    <div>
+      <div class="lbl">Herleitung von P = F · v</div>
+      <div class="body">
+        \[P = \frac{W}{t} = \frac{F \cdot s}{t} = F \cdot \underbrace{\frac{s}{t}}_{=\,v} = F \cdot v\]
+        Praktisch bei Fahrzeugen: Motorleistung bei bekannter Geschwindigkeit direkt berechenbar.
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Wichtige Umrechnungen</div>
+      <div class="body">
+        \(1\,\mathrm{kW} = 1000\,\mathrm{W}\)<br>
+        \(1\,\mathrm{PS} = 735{,}5\,\mathrm{W}\)<br>
+        \(1\,\mathrm{kWh} = 3{,}6 \cdot 10^6\,\mathrm{J}\) <em>(Energieeinheit!)</em>
+      </div>
+    </div>
+    <div class="full">
+      <div class="lbl">Wirkungsgrad</div>
+      <div class="body">
+        Der Wirkungsgrad \(\eta\) gibt an, welcher Anteil der zugeführten Energie nutzbar abgegeben wird:
+        \[\eta = \frac{P_{nutz}}{P_{zu}} = \frac{W_{nutz}}{W_{zu}} \qquad (0 \leq \eta \leq 1)\]
+        Beispiele: Elektromotor \(\eta \approx 0{,}90\) &ensp;|&ensp; Verbrennungsmotor \(\eta \approx 0{,}35\) &ensp;|&ensp; LED \(\eta \approx 0{,}50\)
+      </div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Ein Aufzugmotor hebt eine Kabine (\(m = 500\,\mathrm{kg}\)) in \(t = 12\,\mathrm{s}\) um \(h = 5\,\mathrm{m}\). Welche mechanische Mindestleistung ist erforderlich? Welche elektrische Leistung wird bei \(\eta = 0{,}80\) benötigt?</p>
+    <button class="show-btn" onclick="tog('sk5',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk5">
+      <div class="step"><span class="sn">①</span><span><strong>Hubarbeit berechnen:</strong>
+        \[W_{hub} = m \cdot g \cdot h = 500\,\mathrm{kg} \cdot 9{,}81\,\mathrm{m/s^2} \cdot 5\,\mathrm{m} = 24\,525\,\mathrm{J}\]</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Mechanische Leistung:</strong>
+        \[P_{mech} = \frac{W_{hub}}{t} = \frac{24\,525\,\mathrm{J}}{12\,\mathrm{s}} \approx 2044\,\mathrm{W} \approx 2{,}04\,\mathrm{kW}\]</span></div>
+      <div class="step"><span class="sn">③</span><span><strong>Elektrische Leistung bei \(\eta = 0{,}80\):</strong>
+        \[\eta = \frac{P_{mech}}{P_{el}} \quad\Longrightarrow\quad P_{el} = \frac{P_{mech}}{\eta} = \frac{2044\,\mathrm{W}}{0{,}80} \approx 2555\,\mathrm{W} \approx 2{,}56\,\mathrm{kW}\]
+        Der Motor nimmt mehr Energie auf als er nutzbringend abgibt — \(P_{Verl} = 2{,}56 - 2{,}04 = 0{,}52\,\mathrm{kW}\) werden als Wärme abgegeben.</span></div>
+      <div class="result">Ergebnis: \(\boxed{P_{mech} \approx 2{,}04\,\mathrm{kW}}\) &ensp;|&ensp; \(\boxed{P_{el} \approx 2{,}56\,\mathrm{kW}}\)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────────────────── IMPULS -->
+<div class="sec-head"><span>Impuls &amp; Kraftstoß</span></div>
+
+<div class="card">
+  <div class="card-head" style="border-left-color:#ef4444">
+    <div class="sym" style="background:#fff1f2;color:#881337">\(\vec{p}\)</div>
+    <div class="card-title">
+      <h2>Impuls (Bewegungsgröße)</h2>
+      <div class="unit">Einheit: \([kg \cdot m/s] = [N \cdot s]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body">Der <strong>Impuls</strong> ist eine Vektorgröße: Produkt aus Masse und Geschwindigkeit. Er beschreibt den „Bewegungszustand" eines Körpers. Ein schwerer, langsamer Körper kann denselben Impuls haben wie ein leichter, schneller.</div>
+    </div>
+    <div>
+      <div class="lbl">Formel</div>
+      <div class="formula-box">\[\vec{p} = m \cdot \vec{v}\]</div>
+      <div class="body">Daraus folgt Newtons 2. Gesetz in allgemeiner Form: \(\vec{F} = \dfrac{\mathrm{d}\vec{p}}{\mathrm{d}t}\)</div>
+    </div>
+    <div>
+      <div class="lbl">Impulserhaltungssatz</div>
+      <div class="body">
+        In einem <strong>abgeschlossenen System</strong> (keine äußeren Kräfte) bleibt der Gesamtimpuls konstant:
+        \[\sum \vec{p} = \vec{p}_1 + \vec{p}_2 + \cdots = \mathrm{const}\]
+        Gilt unabhängig von der Art des Stoßes.
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Stoßarten im Vergleich</div>
+      <div class="body">
+        <strong>Elastisch:</strong> Impuls <em>und</em> \(E_{kin}\) erhalten.<br>
+        <strong>Unelastisch:</strong> Nur Impuls erhalten; \(E_{kin}\) wird teilweise in Wärme, Verformung, Schall umgewandelt.<br>
+        <strong>Vollk. unelastisch:</strong> Körper bleiben zusammen.
+      </div>
+    </div>
+    <div class="full">
+      <div class="lbl">Anwendungen</div>
+      <div class="body">Stoßprozesse (Billard, Teilchenphysik), Raketenantrieb (Rückstoß: \(\Delta p_{Gas} = -\Delta p_{Rakete}\)), Explosion (Gesamtimpuls 0 bleibt 0), Fahrzeugkollisionen, Sportphysik.</div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Kugel A (\(m_A = 3\,\mathrm{kg}\), \(v_A = +4\,\mathrm{m/s}\)) stößt auf die ruhende Kugel B (\(m_B = 1\,\mathrm{kg}\)). Nach dem Stoß bewegt sich A mit \(v_A' = +1\,\mathrm{m/s}\). Berechne \(v_B'\) und prüfe das Ergebnis.</p>
+    <button class="show-btn" onclick="tog('sk6',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk6">
+      <div class="step"><span class="sn">①</span><span><strong>Gesamtimpuls vor dem Stoß:</strong>
+        \[p_{ges} = m_A \cdot v_A + m_B \cdot v_B = 3 \cdot 4 + 1 \cdot 0 = 12\,\mathrm{kg\cdot m/s}\]</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Impulserhaltung anwenden:</strong>
+        \[p_{ges} = m_A \cdot v_A' + m_B \cdot v_B'\]
+        \[12 = 3 \cdot 1 + 1 \cdot v_B' \quad\Longrightarrow\quad v_B' = 12 - 3 = 9\,\mathrm{m/s}\]</span></div>
+      <div class="step"><span class="sn">③</span><span><strong>Probe:</strong>
+        \[p_{nach} = 3 \cdot 1 + 1 \cdot 9 = 3 + 9 = 12\,\mathrm{kg\cdot m/s} = p_{vor} \;\checkmark\]</span></div>
+      <div class="result">Ergebnis: \(\boxed{v_B' = 9\,\mathrm{m/s}}\) nach rechts.</div>
+    </div>
+  </div>
+</div>
+
+<!-- KRAFTSTOSS -->
+<div class="card">
+  <div class="card-head" style="border-left-color:#ec4899">
+    <div class="sym" style="background:#fdf4ff;color:#701a75;font-size:13px">\(\Delta\vec{p}\)</div>
+    <div class="card-title">
+      <h2>Kraftstoß &amp; Impulsänderung</h2>
+      <div class="unit">Einheit: \([N \cdot s] = [kg \cdot m/s]\)</div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="lbl">Definition</div>
+      <div class="body">Der <strong>Kraftstoß</strong> ist das Produkt aus Kraft und Einwirkdauer. Er ist gleich der Impulsänderung des Körpers. Gleiche Impulsänderung bei längerer Einwirkzeit → kleinere Kraft.</div>
+    </div>
+    <div>
+      <div class="lbl">Formel</div>
+      <div class="formula-box">\[\vec{F} \cdot \Delta t = \Delta \vec{p} = m \cdot \Delta \vec{v}\]</div>
+      <div class="body">Für veränderliche Kräfte: \(\displaystyle \Delta \vec{p} = \int_{t_1}^{t_2} \vec{F}\,\mathrm{d}t\)</div>
+    </div>
+    <div>
+      <div class="lbl">Herleitung</div>
+      <div class="body">
+        Aus Newtons 2. Gesetz \(\vec{F} = \dfrac{\Delta \vec{p}}{\Delta t}\) folgt durch Umformen:
+        \[\vec{F} \cdot \Delta t = \Delta \vec{p}\]
+        Einheitencheck: \([F \cdot t] = \mathrm{N \cdot s} = \mathrm{kg \cdot m/s} = [p]\) ✓
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Praktische Bedeutung</div>
+      <div class="body">
+        Gleiche Impulsänderung \(\Delta p\), aber <em>längeres</em> \(\Delta t\) → <em>kleinere</em> Kraft \(F\):
+        <br><br>
+        <strong>Airbag:</strong> verlängert \(\Delta t\) → reduziert Spitzenkraft auf Kopf<br>
+        <strong>Knautschzone:</strong> gleiches Prinzip beim Auto<br>
+        <strong>Sportmatten:</strong> weicheres Landen = kleinere Kraft
+      </div>
+    </div>
+  </div>
+  <div class="task">
+    <div class="task-label">Aufgabe</div>
+    <p class="task-text">Ein Ball (\(m = 0{,}5\,\mathrm{kg}\)) prallt mit \(v_1 = 12\,\mathrm{m/s}\) gegen eine Wand und kehrt mit \(v_2 = 8\,\mathrm{m/s}\) zurück (entgegengesetzte Richtung). Die Kontaktzeit beträgt \(\Delta t = 0{,}02\,\mathrm{s}\). Berechne die mittlere Wandkraft auf den Ball.</p>
+    <button class="show-btn" onclick="tog('sk7',this)">Lösung anzeigen ▸</button>
+    <div class="sol" id="sk7">
+      <div class="step"><span class="sn">①</span><span><strong>Vorzeichen festlegen:</strong><br>
+        Richtung zur Wand sei positiv: \(v_1 = +12\,\mathrm{m/s}\), nach dem Aufprall \(v_2 = -8\,\mathrm{m/s}\) (Richtungsumkehr!).</span></div>
+      <div class="step"><span class="sn">②</span><span><strong>Impulsänderung berechnen:</strong>
+        \[\Delta p = m \cdot (v_2 - v_1) = 0{,}5\,\mathrm{kg} \cdot (-8 - 12)\,\mathrm{m/s} = 0{,}5 \cdot (-20) = -10\,\mathrm{N \cdot s}\]
+        Das negative Vorzeichen zeigt: die Kraft wirkt entgegen der ursprünglichen Bewegungsrichtung.</span></div>
+      <div class="step"><span class="sn">③</span><span><strong>Mittlere Kraft:</strong>
+        \[F = \frac{|\Delta p|}{\Delta t} = \frac{10\,\mathrm{N \cdot s}}{0{,}02\,\mathrm{s}} = 500\,\mathrm{N}\]</span></div>
+      <div class="result">Ergebnis: \(\boxed{F = 500\,\mathrm{N}}\) entgegen der ursprünglichen Bewegungsrichtung.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ZUSAMMENFASSUNG -->
+<div class="sec-head"><span>Alle Formeln im Überblick</span></div>
+<div class="summary-box">
+  <div class="formula-grid">
+    <div class="fg-item">\(F = m \cdot a\) &ensp; [N]</div>
+    <div class="fg-item">\(W = F \cdot s \cdot \cos\alpha\) &ensp; [J]</div>
+    <div class="fg-item">\(E_{kin} = \tfrac{1}{2}mv^2\) &ensp; [J]</div>
+    <div class="fg-item">\(E_{pot} = m \cdot g \cdot h\) &ensp; [J]</div>
+    <div class="fg-item">\(P = W/t = F \cdot v\) &ensp; [W]</div>
+    <div class="fg-item">\(\eta = P_{nutz}/P_{zu}\) &ensp; [–]</div>
+    <div class="fg-item">\(p = m \cdot v\) &ensp; [kg·m/s]</div>
+    <div class="fg-item">\(\Delta p = F \cdot \Delta t\) &ensp; [N·s]</div>
+  </div>
+  <div class="note">
+    <strong>Energieerhaltung</strong> (ohne Reibung): \(E_{pot} + E_{kin} = \mathrm{const}\) &ensp;|&ensp;
+    <strong>Impulserhaltung</strong> (abgeschlossenes System): \(\textstyle\sum \vec{p} = \mathrm{const}\)
+  </div>
+</div>
+
+</div><!-- /merkblatt -->
+
+<!-- ═══════════════════════════════════════════════════════════ TAB 2 -->
+<div id="aufgaben" class="tab-pane">
+
+<!-- ───────── Aufgabe 1 -->
+<div class="ex-card">
+  <div class="ex-head">
+    <span class="ex-num">Aufgabe 1</span>
+    <span class="ex-title">Skiabfahrt</span>
+    <div class="ex-tags">
+      <span class="tag">\(E_{pot}\)</span><span class="tag">\(E_{kin}\)</span><span class="tag">Impuls</span><span class="tag">Kraftstoß</span>
+    </div>
+  </div>
+  <div class="ex-body">
+    <p class="ex-text">Ein Skifahrer (Masse inkl. Ausrüstung \(m = 80\,\mathrm{kg}\)) startet aus der Ruhe \((v_0 = 0)\) am oberen Ende einer Piste der Höhe \(h = 35\,\mathrm{m}\). Reibung und Luftwiderstand werden vernachlässigt.</p>
+    <div class="given">\(m = 80\,\mathrm{kg}\) &ensp;|&ensp; \(h = 35\,\mathrm{m}\) &ensp;|&ensp; \(v_0 = 0\) &ensp;|&ensp; \(g = 9{,}81\,\mathrm{m/s^2}\)</div>
+    <p class="sub" data-l="a">Berechne die Geschwindigkeit am Fuß der Piste.</p>
+    <p class="sub" data-l="b">Welchen Impuls besitzt der Skifahrer am Fuß der Piste?</p>
+    <p class="sub" data-l="c">Er bremst in \(\Delta t = 6\,\mathrm{s}\) gleichmäßig bis zum Stillstand. Welche mittlere Bremskraft wirkt?</p>
+    <button class="show-btn" onclick="tog('ex1',this)" style="margin-top:8px">Lösung anzeigen ▸</button>
+  </div>
+  <div class="ex-sol" id="ex1">
+    <div class="sub-sol">
+      <div class="sub-sol-title">a) Geschwindigkeit am Fuß</div>
+      <div class="hint">Ansatz: Energieerhaltungssatz — die gesamte potenzielle Energie wird in kinetische Energie umgewandelt. Reibung = 0 → keine Energieverluste.</div>
+      \[E_{pot} = E_{kin} \quad\Longrightarrow\quad m \cdot g \cdot h = \frac{1}{2} m \cdot v^2\]
+      Die Masse \(m\) kürzt sich auf beiden Seiten heraus:
+      \[v = \sqrt{2 \cdot g \cdot h} = \sqrt{2 \cdot 9{,}81 \cdot 35} = \sqrt{686{,}7} \approx \boxed{26{,}2\,\mathrm{m/s} \approx 94\,\mathrm{km/h}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">b) Impuls am Fuß der Piste</div>
+      \[p = m \cdot v = 80\,\mathrm{kg} \cdot 26{,}2\,\mathrm{m/s} \approx \boxed{2096\,\mathrm{kg \cdot m/s}}\]
+      Der Impulsvektor zeigt in Fahrtrichtung (hangabwärts).
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">c) Mittlere Bremskraft</div>
+      <div class="hint">Ansatz: Kraftstoß = Impulsänderung. Der Skifahrer wird von \(p = 2096\,\mathrm{kg\cdot m/s}\) auf \(p' = 0\) abgebremst.</div>
+      \[F \cdot \Delta t = |\Delta p| = |p' - p| = |0 - 2096| = 2096\,\mathrm{N \cdot s}\]
+      \[F = \frac{|\Delta p|}{\Delta t} = \frac{2096\,\mathrm{N \cdot s}}{6\,\mathrm{s}} \approx \boxed{349\,\mathrm{N}}\]
+      Zum Vergleich: Gewichtskraft \(F_G = 80 \cdot 9{,}81 \approx 785\,\mathrm{N}\) — die Bremskraft entspricht ca. 45% des Körpergewichts.
+    </div>
+  </div>
+</div>
+
+<!-- ───────── Aufgabe 2 -->
+<div class="ex-card">
+  <div class="ex-head">
+    <span class="ex-num">Aufgabe 2</span>
+    <span class="ex-title">Vollkommen unelastischer Stoß</span>
+    <div class="ex-tags">
+      <span class="tag">Impuls</span><span class="tag">\(E_{kin}\)</span><span class="tag">Erhaltungssätze</span>
+    </div>
+  </div>
+  <div class="ex-body">
+    <p class="ex-text">Zwei Eisklötze gleiten reibungsfrei auf einer Eisfläche. Klotz A (\(m_A = 4\,\mathrm{kg}\)) bewegt sich mit \(v_A = 5\,\mathrm{m/s}\) nach rechts, Klotz B (\(m_B = 2\,\mathrm{kg}\)) mit \(v_B = 1\,\mathrm{m/s}\) nach links. Sie stoßen zusammen und bleiben aneinander haften.</p>
+    <div class="given"><strong>Vorzeichenkonvention:</strong> rechts = positiv &ensp;|&ensp; \(v_A = +5\,\mathrm{m/s}\), \(v_B = -1\,\mathrm{m/s}\)</div>
+    <p class="sub" data-l="a">Berechne den Gesamtimpuls vor dem Stoß.</p>
+    <p class="sub" data-l="b">Welche gemeinsame Geschwindigkeit haben die Klötze nach dem Stoß?</p>
+    <p class="sub" data-l="c">Wie viel kinetische Energie geht verloren? Wo bleibt diese Energie?</p>
+    <button class="show-btn" onclick="tog('ex2',this)" style="margin-top:8px">Lösung anzeigen ▸</button>
+  </div>
+  <div class="ex-sol" id="ex2">
+    <div class="sub-sol">
+      <div class="sub-sol-title">a) Gesamtimpuls vor dem Stoß</div>
+      \[p_{ges} = m_A \cdot v_A + m_B \cdot v_B = 4 \cdot (+5) + 2 \cdot (-1) = 20 - 2 = \boxed{18\,\mathrm{kg\cdot m/s}}\]
+      Der positive Wert zeigt: Der Gesamtimpuls ist nach rechts gerichtet.
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">b) Gemeinsame Geschwindigkeit nach dem Stoß</div>
+      <div class="hint">Impulserhaltung gilt beim Stoß immer. Da die Klötze haften, gilt \(v_A' = v_B' = v'\).</div>
+      \[m_A \cdot v_A + m_B \cdot v_B = (m_A + m_B) \cdot v'\]
+      \[18\,\mathrm{kg\cdot m/s} = (4 + 2)\,\mathrm{kg} \cdot v' \quad\Longrightarrow\quad v' = \frac{18}{6} = \boxed{3\,\mathrm{m/s \; (nach\; rechts)}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">c) Verlust an kinetischer Energie</div>
+      \[E_{kin,vor} = \frac{1}{2}m_A v_A^2 + \frac{1}{2}m_B v_B^2 = \frac{1}{2} \cdot 4 \cdot 25 + \frac{1}{2} \cdot 2 \cdot 1 = 50 + 1 = 51\,\mathrm{J}\]
+      \[E_{kin,nach} = \frac{1}{2}(m_A + m_B) \cdot v'^2 = \frac{1}{2} \cdot 6 \cdot 9 = 27\,\mathrm{J}\]
+      \[\Delta E_{kin} = 51 - 27 = \boxed{24\,\mathrm{J \; verloren}}\]
+      Diese Energie wird in Verformungsarbeit, Wärme und Schall umgewandelt. Beim unelastischen Stoß ist <em>nur der Impuls</em>, nicht die kinetische Energie erhalten.
+    </div>
+  </div>
+</div>
+
+<!-- ───────── Aufgabe 3 -->
+<div class="ex-card">
+  <div class="ex-head">
+    <span class="ex-num">Aufgabe 3</span>
+    <span class="ex-title">Aufzug mit Wirkungsgrad</span>
+    <div class="ex-tags">
+      <span class="tag">Arbeit</span><span class="tag">Leistung</span><span class="tag">Wirkungsgrad</span>
+    </div>
+  </div>
+  <div class="ex-body">
+    <p class="ex-text">Ein Aufzug befördert eine Kabine (\(m_{Kab} = 600\,\mathrm{kg}\)) mit 4 Personen (je \(m_P = 75\,\mathrm{kg}\)) um \(h = 24\,\mathrm{m}\) nach oben. Der Aufzug benötigt dafür \(t = 18\,\mathrm{s}\). Der Wirkungsgrad des Motors beträgt \(\eta = 0{,}75\).</p>
+    <div class="given">\(m_{Kab} = 600\,\mathrm{kg}\), 4 Pers. à \(75\,\mathrm{kg}\) &ensp;|&ensp; \(h = 24\,\mathrm{m}\) &ensp;|&ensp; \(t = 18\,\mathrm{s}\) &ensp;|&ensp; \(\eta = 0{,}75\)</div>
+    <p class="sub" data-l="a">Berechne die Gesamtmasse und die verrichtete Hubarbeit.</p>
+    <p class="sub" data-l="b">Welche mechanische Leistung wird benötigt?</p>
+    <p class="sub" data-l="c">Welche elektrische Eingangsleistung benötigt der Motor?</p>
+    <button class="show-btn" onclick="tog('ex3',this)" style="margin-top:8px">Lösung anzeigen ▸</button>
+  </div>
+  <div class="ex-sol" id="ex3">
+    <div class="sub-sol">
+      <div class="sub-sol-title">a) Gesamtmasse und Hubarbeit</div>
+      \[m_{ges} = m_{Kab} + 4 \cdot m_P = 600 + 4 \cdot 75 = 600 + 300 = 900\,\mathrm{kg}\]
+      \[W_{hub} = m_{ges} \cdot g \cdot h = 900\,\mathrm{kg} \cdot 9{,}81\,\mathrm{m/s^2} \cdot 24\,\mathrm{m} = 211\,896\,\mathrm{J} \approx \boxed{212\,\mathrm{kJ}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">b) Mechanische Leistung</div>
+      \[P_{mech} = \frac{W_{hub}}{t} = \frac{211\,896\,\mathrm{J}}{18\,\mathrm{s}} \approx 11\,772\,\mathrm{W} \approx \boxed{11{,}8\,\mathrm{kW}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">c) Elektrische Eingangsleistung</div>
+      <div class="hint">Wirkungsgrad umstellen: \(\eta = P_{mech}/P_{el}\) &ensp;→&ensp; \(P_{el} = P_{mech}/\eta\)</div>
+      \[P_{el} = \frac{P_{mech}}{\eta} = \frac{11\,772\,\mathrm{W}}{0{,}75} \approx \boxed{15\,696\,\mathrm{W} \approx 15{,}7\,\mathrm{kW}}\]
+      Der Verlust beträgt \(P_{Verl} = 15{,}7 - 11{,}8 = 3{,}9\,\mathrm{kW}\) — dieser Anteil wird als Wärme im Motor und Getriebe abgegeben.
+    </div>
+  </div>
+</div>
+
+<!-- ───────── Aufgabe 4 -->
+<div class="ex-card">
+  <div class="ex-head">
+    <span class="ex-num">Aufgabe 4</span>
+    <span class="ex-title">Freier Fall — Impuls und Bremskraft</span>
+    <div class="ex-tags">
+      <span class="tag">\(E_{pot}\)</span><span class="tag">\(E_{kin}\)</span><span class="tag">Impuls</span><span class="tag">Kraft</span>
+    </div>
+  </div>
+  <div class="ex-body">
+    <p class="ex-text">Ein Stein (\(m = 0{,}5\,\mathrm{kg}\)) wird aus der Ruhe von einem \(h = 80\,\mathrm{m}\) hohen Turm fallengelassen. Luftwiderstand wird vernachlässigt. Nach dem Aufprall dringt der Stein \(s = 4\,\mathrm{cm} = 0{,}04\,\mathrm{m}\) in den Boden ein, bis er zur Ruhe kommt.</p>
+    <div class="given">\(m = 0{,}5\,\mathrm{kg}\) &ensp;|&ensp; \(h = 80\,\mathrm{m}\) &ensp;|&ensp; \(s = 0{,}04\,\mathrm{m}\) &ensp;|&ensp; \(g = 9{,}81\,\mathrm{m/s^2}\)</div>
+    <p class="sub" data-l="a">Berechne die Aufprallgeschwindigkeit.</p>
+    <p class="sub" data-l="b">Welchen Impuls hat der Stein kurz vor dem Aufprall?</p>
+    <p class="sub" data-l="c">Welche mittlere Bremskraft wirkt beim Eindringen in den Boden?</p>
+    <button class="show-btn" onclick="tog('ex4',this)" style="margin-top:8px">Lösung anzeigen ▸</button>
+  </div>
+  <div class="ex-sol" id="ex4">
+    <div class="sub-sol">
+      <div class="sub-sol-title">a) Aufprallgeschwindigkeit</div>
+      <div class="hint">Energieerhaltung: \(E_{pot} \to E_{kin}\). Die Masse kürzt sich heraus.</div>
+      \[v = \sqrt{2 \cdot g \cdot h} = \sqrt{2 \cdot 9{,}81 \cdot 80} = \sqrt{1569{,}6} \approx \boxed{39{,}6\,\mathrm{m/s} \approx 143\,\mathrm{km/h}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">b) Impuls beim Aufprall</div>
+      \[p = m \cdot v = 0{,}5\,\mathrm{kg} \cdot 39{,}6\,\mathrm{m/s} \approx \boxed{19{,}8\,\mathrm{kg \cdot m/s}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">c) Mittlere Bremskraft</div>
+      <div class="hint">Arbeit-Energie-Theorem: Die kinetische Energie beim Aufprall wird durch die Bremskraft über den Weg \(s = 0{,}04\,\mathrm{m}\) abgebaut.</div>
+      \[F \cdot s = E_{kin} = \frac{1}{2}mv^2 \quad\Longrightarrow\quad F = \frac{m \cdot v^2}{2 \cdot s}\]
+      \[F = \frac{0{,}5\,\mathrm{kg} \cdot (39{,}6)^2\,\mathrm{m^2/s^2}}{2 \cdot 0{,}04\,\mathrm{m}} = \frac{0{,}5 \cdot 1568}{0{,}08} = \boxed{9800\,\mathrm{N}}\]
+      Die Gewichtskraft des Steins beträgt nur \(F_G = 0{,}5 \cdot 9{,}81 \approx 4{,}9\,\mathrm{N}\). Die Bremskraft ist damit ca. <strong>2000-mal</strong> größer als das Gewicht — das zeigt eindrücklich, wie gefährlich kurze Bremswege sind.
+    </div>
+  </div>
+</div>
+
+<!-- ───────── Aufgabe 5 -->
+<div class="ex-card">
+  <div class="ex-head">
+    <span class="ex-num">Aufgabe 5</span>
+    <span class="ex-title">Fahrzeugdynamik</span>
+    <div class="ex-tags">
+      <span class="tag">Kraft</span><span class="tag">Arbeit</span><span class="tag">Leistung</span><span class="tag">\(E_{kin}\)</span>
+    </div>
+  </div>
+  <div class="ex-body">
+    <p class="ex-text">Ein Auto (\(m = 1500\,\mathrm{kg}\)) beschleunigt auf einer horizontalen Straße gleichmäßig von \(v_0 = 0\) auf \(v = 108\,\mathrm{km/h}\) in \(t = 10\,\mathrm{s}\). Dabei wirkt eine konstante Reibungskraft \(F_R = 300\,\mathrm{N}\).</p>
+    <div class="given">\(m = 1500\,\mathrm{kg}\) &ensp;|&ensp; \(v = 108\,\mathrm{km/h} = 30\,\mathrm{m/s}\) &ensp;|&ensp; \(t = 10\,\mathrm{s}\) &ensp;|&ensp; \(F_R = 300\,\mathrm{N}\)</div>
+    <p class="sub" data-l="a">Berechne Beschleunigung und nötige Antriebskraft des Motors.</p>
+    <p class="sub" data-l="b">Welche Strecke legt das Auto während der Beschleunigung zurück?</p>
+    <p class="sub" data-l="c">Berechne die gesamte Motorarbeit und überprüfe mit dem Energiesatz.</p>
+    <p class="sub" data-l="d">Welche Motorleistung wird am Ende der Beschleunigung (\(v = 30\,\mathrm{m/s}\)) erreicht?</p>
+    <button class="show-btn" onclick="tog('ex5',this)" style="margin-top:8px">Lösung anzeigen ▸</button>
+  </div>
+  <div class="ex-sol" id="ex5">
+    <div class="sub-sol">
+      <div class="sub-sol-title">a) Beschleunigung und Antriebskraft</div>
+      \[a = \frac{\Delta v}{\Delta t} = \frac{30\,\mathrm{m/s}}{10\,\mathrm{s}} = 3\,\mathrm{m/s^2}\]
+      Der Motor muss Trägheit <em>und</em> Reibung überwinden:
+      \[F_{Motor} = \underbrace{m \cdot a}_{Trägheit} + \underbrace{F_R}_{Reibung} = 1500 \cdot 3 + 300 = 4500 + 300 = \boxed{4800\,\mathrm{N}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">b) Zurückgelegte Strecke</div>
+      Bei gleichmäßiger Beschleunigung aus dem Stand (\(v_0 = 0\)):
+      \[s = \frac{1}{2} \cdot a \cdot t^2 = \frac{1}{2} \cdot 3\,\mathrm{m/s^2} \cdot (10\,\mathrm{s})^2 = \boxed{150\,\mathrm{m}}\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">c) Motorarbeit und Energiebilanz</div>
+      \[W_{Motor} = F_{Motor} \cdot s = 4800\,\mathrm{N} \cdot 150\,\mathrm{m} = \boxed{720\,000\,\mathrm{J} = 720\,\mathrm{kJ}}\]
+      <strong>Probe mit dem Energiesatz:</strong> Die Motorarbeit teilt sich auf in kinetische Energie und Reibungswärme:
+      \[W_{kin} = \frac{1}{2}mv^2 = \frac{1}{2} \cdot 1500 \cdot 900 = 675\,000\,\mathrm{J}\]
+      \[W_{Reib} = F_R \cdot s = 300 \cdot 150 = 45\,000\,\mathrm{J}\]
+      \[W_{Motor} = W_{kin} + W_{Reib} = 675\,000 + 45\,000 = 720\,000\,\mathrm{J} \; \checkmark\]
+    </div>
+    <div class="sub-sol">
+      <div class="sub-sol-title">d) Motorleistung bei v = 30 m/s</div>
+      \[P_{max} = F_{Motor} \cdot v = 4800\,\mathrm{N} \cdot 30\,\mathrm{m/s} = \boxed{144\,000\,\mathrm{W} = 144\,\mathrm{kW} \approx 196\,\mathrm{PS}}\]
+      Die Leistung steigt während der Beschleunigung mit der Geschwindigkeit: bei \(v = 0\) gilt \(P = 0\); erst bei Vollgeschwindigkeit wird die Maximalleistung erreicht.
+    </div>
+  </div>
+</div>
+
+</div><!-- /aufgaben -->
+</div><!-- /content -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left:"\\[", right:"\\]", display:true},
+      {left:"\\(", right:"\\)", display:false}
+    ],
+    throwOnError: false
+  });
+});
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function tog(id, btn) {
+  const el = document.getElementById(id);
+  const open = el.style.display !== 'none' && el.style.display !== '';
+  el.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Lösung anzeigen ▸' : 'Lösung verbergen ▾';
+  if (!open && typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(el, {
+      delimiters: [
+        {left:"\\[", right:"\\]", display:true},
+        {left:"\\(", right:"\\)", display:false}
+      ],
+      throwOnError: false
+    });
+  }
+}
+</script>
+</body>
+</html>
